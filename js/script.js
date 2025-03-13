@@ -9,12 +9,12 @@ $(document).ready(function () {
         container.empty();
 
         data.forEach(recette => {
-            // Vérification des noms de clés pour s'assurer qu'on utilise les bons noms du JSON
-            let image = recette.imageURL || "default.jpg"; // Utilisation de imageURL du JSON
-            let titre = recette.nameFR || recette.name || "Titre inconnu"; // Utilisation de nameFR ou name
-            let description = recette.name || "Pas de description"; // Utilisation du name pour une brève description
-            let steps = recette.stepsFR || recette.steps || []; // Utilisation de stepsFR pour les étapes en français
-            let author = recette.author ; // Utilisation de author pour l'auteur
+            // Verification des noms de clés pour s'assurer qu'on utilise les bons noms du JSON
+            let image = recette.imageURL || "default.jpg"; 
+            let titre = recette.nameFR || recette.name || "Titre inconnu"; 
+            let description = recette.name || "Pas de description"; 
+            let steps = recette.stepsFR || recette.steps || []; 
+            let author = recette.author ; 
             let card = `
                 <div class="col-md-4">
                     <div class="card mb-4">
@@ -38,22 +38,4 @@ $(document).ready(function () {
         console.log("Erreur lors du chargement des recettes.");
     });
 
-    // Rechercher un utilisateur
-    $("#searchUser").on("click", function () {
-        let prenom = $("#prenomInput").val();
-        $.ajax({
-            url: "get_utilisateur.php",
-            method: "GET",
-            data: { prenom: prenom },
-            dataType: "json"
-        }).done(function (user) {
-            // Vérification des noms de clés pour l'utilisateur
-            let nom = user.nom || user.lastname || "Nom inconnu"; // Adapter selon JSON
-            let email = user.email || user.mail || "Email inconnu"; // Adapter selon JSON
-
-            $("#userInfo").html(`Nom: ${nom} <br> Email: ${email}`);
-        }).fail(function () {
-            $("#userInfo").html("Utilisateur non trouvé.");
-        });
-    });
 });

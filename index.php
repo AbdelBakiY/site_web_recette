@@ -19,7 +19,6 @@
     <div id="message"></div>
 
     <div class="row" id="recettes-container">
-        <!-- Les cartes de recettes seront insérées ici par script.js -->
     </div>
 </div>
 

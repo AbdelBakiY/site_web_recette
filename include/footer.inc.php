@@ -1,7 +1,6 @@
 <footer class="bg-dark text-white py-4 mt-5">
     <div class="container">
         <div class="row">
-            <!-- Section 1 : Liens rapides -->
             <div class="col-md-3">
                 <h5>Navigation</h5>
                 <ul class="list-unstyled">
@@ -13,7 +12,6 @@
                 </ul>
             </div>
 
-            <!-- Section 2 : Réseaux sociaux -->
             <div class="col-md-3">
                 <h5>Suivez-nous</h5>
                 <ul class="list-unstyled">
@@ -23,7 +21,6 @@
                 </ul>
             </div>
 
-            <!-- Section 3 : Newsletter -->
             <div class="col-md-3">
                 <h5>Newsletter</h5>
                 <p>Recevez nos meilleures recettes chaque semaine !</p>
@@ -33,7 +30,6 @@
                 </form>
             </div>
 
-            <!-- Section 4 : Mentions légales -->
             <div class="col-md-3">
                 <h5>Informations</h5>
                 <ul class="list-unstyled">
@@ -44,16 +40,10 @@
             </div>
         </div>
 
-        <hr class="bg-light">
-
-        <!-- Copyright -->
-        <div class="text-center">
-            <p>&copy; <?php echo date('Y'); ?> MonSiteDeRecettes - Tous droits réservés.</p>
-        </div>
+       
     </div>
 </footer>
 
-<!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -15,12 +15,10 @@
     <div class="container">
         <a class="navbar-brand" href="index.php">🍽️ MonSiteDeRecettes</a>
 
-        <!-- Bouton pour mobile -->
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <!-- Menu de navigation -->
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
@@ -48,13 +46,11 @@
                 </li>
             </ul>
 
-            <!-- Barre de recherche -->
             <form class="d-flex ms-3" action="recherche.php" method="GET">
                 <input class="form-control me-2" type="search" name="q" placeholder="Rechercher..." aria-label="Search">
                 <button class="btn btn-outline-success" type="submit">🔍</button>
             </form>
 
-            <!-- Bouton Connexion / Inscription -->
             <ul class="navbar-nav ms-3">
                 <li class="nav-item">
                     <a class="btn btn-primary" href="login.php">Connexion</a>
