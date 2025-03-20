@@ -1,5 +1,8 @@
 <?php
 include 'include/functions.inc.php';
+
+session_start();
+$Logged=isset($_SESSION['email']) ;
 ?>
 
 <!DOCTYPE html>
@@ -47,12 +50,6 @@ include 'include/functions.inc.php';
                         <li><a class="dropdown-item" href="categorie.php?type=boissons">Boissons</a></li>
                     </ul>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="blog.php">Blog</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="contact.php">Contact</a>
-                </li>
             </ul>
 
             <form class="d-flex ms-3" action="recherche.php" method="GET">
@@ -61,12 +58,14 @@ include 'include/functions.inc.php';
             </form>
 
             <ul class="navbar-nav ms-3">
-                <li class="nav-item">
-                    <a class="btn btn-primary" href="login.php">Connexion</a>
-                </li>
-                <li class="nav-item ms-2">
-                    <a class="btn btn-outline-primary" href="register.php">Inscription</a>
-                </li>
+            <li>
+            <?php if ($Logged): ?>
+                <a href="logout.php" id="login-btn" class="btn btn-danger">Se déconnecter</a>
+            <?php else: ?>
+                <a href="login.php" id="login-btn" class="btn btn-primary">Se connecter</a>
+            <?php endif; ?>
+        </li>
+                
             </ul>
         </div>
     </div>
