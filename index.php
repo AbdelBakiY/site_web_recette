@@ -13,7 +13,6 @@ include 'include/header.inc.php'; ?>
             container.empty();
 
             data.forEach(recette => {
-                // Verification des noms de clés pour s'assurer qu'on utilise les bons noms du JSON
 
                 let image = recette.imageURL || "default.jpg";
                 let titre = recette.nameFR || recette.name || "Titre inconnu";

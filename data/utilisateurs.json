@@ -10,5 +10,17 @@
             ],
             "attribue": []
         }
+    },
+    {
+        "nom": "test",
+        "prenom": "yos",
+        "email": "dekhailyoussef@test.com",
+        "mdp": "$2y$10$cntD6NHDJ9MneZVOso2w5e23.67b4DxdqyMqYM4exitA0hazLQyRe",
+        "roles": {
+            "demande": [
+                "DemandeChef"
+            ],
+            "attribue": []
+        }
     }
 ]
