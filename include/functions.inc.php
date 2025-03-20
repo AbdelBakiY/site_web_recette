@@ -128,26 +128,21 @@ function envoyerLienReinitialisation($email) {
 function reinitialiserMotDePasse($email, $nouveauMdp) {
     $utilisateursFile = 'data/utilisateurs.json';
 
-    if (!file_exists($utilisateursFile)) {
-        return "Erreur : Fichier des utilisateurs introuvable.";
-    }
+ 
 
     $utilisateursData = json_decode(file_get_contents($utilisateursFile), true);
-    if (!is_array($utilisateursData)) {
-        return "Erreur : Fichier des utilisateurs corrompu.";
-    }
-
+ 
     foreach ($utilisateursData as &$utilisateur) {
         if ($utilisateur['email'] === $email) {
             $utilisateur['mdp'] = password_hash($nouveauMdp, PASSWORD_DEFAULT);
 
             file_put_contents($utilisateursFile, json_encode($utilisateursData, JSON_PRETTY_PRINT));
 
-            return "Votre mot de passe a été réinitialisé avec succès.";
+            return "mdp renitialisé";
         }
     }
 
-    return "E-mail invalide.";
+    return "mail invalide.";
 }
 
 ?>

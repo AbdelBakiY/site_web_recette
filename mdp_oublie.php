@@ -7,6 +7,7 @@ if (isset($_POST['mdp_oublie'])) {
     $email = urldecode( htmlspecialchars($_POST['email']));
     $resultat = envoyerLienReinitialisation($email);
     echo "<p style='color:green;'>$resultat</p>"; 
+    header("Location: login.php");
     
     
 }
