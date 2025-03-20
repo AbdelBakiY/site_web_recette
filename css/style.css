@@ -66,3 +66,85 @@ nav ul li a:hover {
 .search-bar button:hover {
     background: #555;
 }
+
+
+
+
+/* Style du formulaire d'inscription */
+.form-container-inscription {
+    background: #fff;
+    max-width: 400px;
+    margin: 30px auto;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-label {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
+
+.form-input:focus {
+    border-color: #ffcc00;
+    box-shadow: 0 0 5px rgba(255, 204, 0, 0.5);
+}
+
+#mdp_message {
+    font-size: 14px;
+    color: red;
+    margin-top: 5px;
+}
+
+.form-submit {
+    width: 100%;
+    padding: 10px;
+    background: #ffcc00;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    transition: background 0.3s;
+    margin-top: 10px;
+}
+
+.form-submit:hover {
+    background: #e6b800;
+}
+
+.form-link {
+    display: block;
+    text-align: center;
+    margin-top: 10px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+}
+
+.form-link:hover {
+    color: #555;
+}
+
+/* Messages d'erreur */
+#non_cor, #deja_mail {
+    display: none;
+    color: red;
+    text-align: center;
+    margin-top: 5px;
+}
