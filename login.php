@@ -1,4 +1,4 @@
-<?php 
+<?php
 $titre = "Connexion | MonSiteDeRecettes";
 include 'include/header.inc.php';
 
@@ -7,9 +7,89 @@ if (isset($_POST['connexion'])) {
     $mdp = htmlspecialchars($_POST['mdp']);
 
     connexion($e_mail, $mdp);
+
 }
 
 ?>
+
+<script>
+    $(document).ready(function() {
+        let emailExists = false;
+        let mdpCorrect = false;
+        $('#e-mail').on('input', function() {
+            var email = $(this).val().trim();
+            if (email !== '') {
+                $.ajax({
+                    url: 'verifier_email.php',
+                    type: 'POST',
+                    data: {
+                        email: email
+                    },
+                    success: function(response) {
+                        if (response.trim() === 'email_existe') {
+                            $('#mail_faux').hide();
+                            emailExists = true;
+                        } else {
+                            $('#mail_faux').show();
+                            emailExists = false;
+                        }
+                        verifierBoutonSubmit();
+                    },
+                    error: function() {
+                        alert('Erreur lors de la vérification de l\'email.');
+                    }
+                });
+            } else {
+                $('#mail_faux').hide();
+                emailExists = false;
+                verifierBoutonSubmit();
+            }
+        });
+
+        $('#mdp').on('input', function() {
+            var email = $('#e-mail').val().trim();
+            var mdp = $(this).val().trim();
+            if (email !== '' && mdp !== '') {
+                $.ajax({
+                    url: 'verifier_mdp.php',
+                    type: 'POST',
+                    data: {
+                        email: email,
+                        mdp: mdp
+                    },
+                    success: function(response) {
+                        if (response.trim() === 'mdp_correct') {
+                            $('#mdp_faux').hide();
+                            mdpCorrect = true;
+                        } else {
+                            $('#mdp_faux').show();
+                            mdpCorrect = false;
+                        }
+                        verifierBoutonSubmit();
+                    },
+                    error: function() {
+                        alert('Erreur lors de la vérification du mot de passe.');
+                    }
+                });
+            } else {
+                $('#mdp_faux').hide();
+                mdpCorrect = false;
+                verifierBoutonSubmit();
+            }
+        });
+
+        function verifierBoutonSubmit() {
+            if (emailExists && mdpCorrect) {
+                $('input[name="connexion"]').prop('disabled', false);
+            } else {
+                $('input[name="connexion"]').prop('disabled', true);
+            }
+        }
+
+        verifierBoutonSubmit();
+    });
+</script>
+</script>
 <style>
     .form-container {
         background: #fff;
@@ -95,7 +175,7 @@ if (isset($_POST['connexion'])) {
 
 <main>
     <h2 style="color:black;text-align:center;font-size: 2em;font-family: 'Poppins', sans-serif;">Connexion</h2>
-    <form action="connexion.php" method="post" class="form-container">
+    <form action="login.php" method="post" class="form-container">
         <label for="e-mail" class="form-label">E-mail :</label>
         <input type="email" id="e-mail" name="e-mail" required class="form-input" />
 
