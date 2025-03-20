@@ -2,10 +2,8 @@
 
 function connexion($e_mail, $mdp) {}
 
-function inscription($nom, $prenom, $email, $mdp,$choixRole)
+function inscription($nom, $prenom, $email, $mdp, $choixRole)
 {
-
-
     $utilisateursFile = 'data/utilisateurs.json';
     $mdpHash = password_hash($mdp, PASSWORD_DEFAULT);
 
@@ -20,6 +18,15 @@ function inscription($nom, $prenom, $email, $mdp,$choixRole)
         )
     );
 
+    if (file_exists($utilisateursFile)) {
+        $utilisateursData = json_decode(file_get_contents($utilisateursFile), true);
+        if (!is_array($utilisateursData)) {
+            $utilisateursData = [];
+        }
+    } else {
+        $utilisateursData = [];
+    }
+
     $utilisateursData[] = $nouvelUtilisateur;
 
     if (file_put_contents($utilisateursFile, json_encode($utilisateursData, JSON_PRETTY_PRINT))) {
@@ -27,15 +34,10 @@ function inscription($nom, $prenom, $email, $mdp,$choixRole)
         $_SESSION['nom'] = $nom;
         $_SESSION['prenom'] = $prenom;
         $_SESSION['email'] = $email;
-        
+
         header("Location: index.php");
         exit();
-
     } else {
         return "Erreur lors de l'enregistrement de l'utilisateur.";
     }
-    
-    
 }
-
-?>
