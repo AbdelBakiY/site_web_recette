@@ -3,14 +3,12 @@
 function connexion($e_mail, $mdp)
 {
 
-    // Chemin du fichier JSON des utilisateurs
     $utilisateursFile = 'data/utilisateurs.json';
 
     if (!file_exists($utilisateursFile)) {
         return "Erreur : Fichier des utilisateurs introuvable.";
     }
 
-    // Lire le fichier JSON
     $utilisateursData = json_decode(file_get_contents($utilisateursFile), true);
     if (!is_array($utilisateursData)) {
         return "Erreur : Fichier des utilisateurs corrompu.";
@@ -23,7 +21,6 @@ function connexion($e_mail, $mdp)
             if (password_verify($mdp, $utilisateur['mdp'])) {
                 
                 session_start();
-
                 
                 $_SESSION['nom'] = $utilisateur['nom'];
                 $_SESSION['prenom'] = $utilisateur['prenom'];
@@ -47,17 +44,31 @@ function inscription($nom, $prenom, $email, $mdp, $choixRole)
 {
     $utilisateursFile = 'data/utilisateurs.json';
     $mdpHash = password_hash($mdp, PASSWORD_DEFAULT);
+    if($email==="abdelbaki.mougari@gmail.com"){
 
-    $nouvelUtilisateur = array(
-        "nom" => $nom,
-        "prenom" => $prenom,
-        "email" => $email,
-        "mdp" => $mdpHash,
-        "roles" => array(
-            "demande" => array($choixRole),
-            "attribue" => array()
-        )
-    );
+        $nouvelUtilisateur = array(
+            "nom" => $nom,
+            "prenom" => $prenom,
+            "email" => $email,
+            "mdp" => $mdpHash,
+            "roles" => array(
+                "demande" => $choixRole ? array($choixRole) : array(),
+
+                "attribue" => array("admin")
+            )
+        );
+    }else{
+        $nouvelUtilisateur = array(
+            "nom" => $nom,
+            "prenom" => $prenom,
+            "email" => $email,
+            "mdp" => $mdpHash,
+            "roles" => array(
+                "demande" => $choixRole ? array($choixRole) : array(),
+                "attribue" => array()
+            )
+        );
+    };
 
     if (file_exists($utilisateursFile)) {
         $utilisateursData = json_decode(file_get_contents($utilisateursFile), true);
@@ -75,6 +86,8 @@ function inscription($nom, $prenom, $email, $mdp, $choixRole)
         $_SESSION['nom'] = $nom;
         $_SESSION['prenom'] = $prenom;
         $_SESSION['email'] = $email;
+        $_SESSION['roles'] = $nouvelUtilisateur['roles'];
+
 
         header("Location: index.php");
         exit();
