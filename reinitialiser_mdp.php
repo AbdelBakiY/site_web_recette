@@ -5,8 +5,10 @@ include 'include/header.inc.php';
 
 if (isset($_POST['reinitialiser_mdp'])) {
     $email = $_POST['email'];
+    
     $nouveauMdp = htmlspecialchars($_POST['nouveau_mdp']);
     $resultat = reinitialiserMotDePasse($email, $nouveauMdp);
+    
     header("Location: login.php");
 }
 
@@ -103,7 +105,14 @@ if (isset($_POST['reinitialiser_mdp'])) {
 <main>
     <h2 style="color:black;text-align:center;font-size: 2em;font-family: 'Poppins', sans-serif;">Réinitialisation du mot de passe</h2>
     <form action="reinitialiser_mdp.php" method="post" class="form-container">
-        <input type="hidden" name="email" value="<?php echo htmlspecialchars($email); ?>" />
+        <input type="hidden" name="email" value="<?php if(isset($_GET["email"])){
+            echo htmlspecialchars($_GET["email"]) ;
+
+        }else{
+            header("location : mdp_oublie") ; 
+        }
+        
+        ?>" />
 
         <label for="nouveau_mdp" class="form-label">Nouveau mot de passe :</label>
         <input type="password" id="nouveau_mdp" name="nouveau_mdp" required class="form-input" />
