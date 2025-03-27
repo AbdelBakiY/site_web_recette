@@ -20,11 +20,8 @@ function connexion($e_mail, $mdp)
             
             if (password_verify($mdp, $utilisateur['mdp'])) {
                 
-<<<<<<< HEAD
                 session_start();
-=======
 
->>>>>>> 3e506486891cf90240861b54ad3d9d65915d061d
                 
                 $_SESSION['nom'] = $utilisateur['nom'];
                 $_SESSION['prenom'] = $utilisateur['prenom'];

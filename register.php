@@ -41,7 +41,7 @@ if (isset($_POST["inscription"])) {
             }
         });
 
-        
+
 
         function verifierEmail(email) {
             $.ajax({

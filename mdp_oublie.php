@@ -1,7 +1,7 @@
 <?php
 $titre = "Mot de passe oublié | MonSiteDeRecettes";
 
-include 'include/header.inc.php';
+require_once 'include/header.inc.php';
 
 if (isset($_POST['mdp_oublie'])) {
     $email = urldecode( htmlspecialchars($_POST['email']));

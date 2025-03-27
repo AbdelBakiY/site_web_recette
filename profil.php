@@ -37,7 +37,7 @@ if (!isset($utilisateurConnecte['roles'])) {
             <button class="btn btn-primary" id="edit-info">Modifier mes infos</button>
         </div>
 
-        <!-- Formulaire de modification -->
+        <!-- Formulaire de modification infos + mdp -->
         <div id="form-modif" class="mt-4" style="display:none;">
             <h5>Modifier mes informations :</h5>
             <form id="modifForm">
@@ -53,24 +53,18 @@ if (!isset($utilisateurConnecte['roles'])) {
                     <label>Email</label>
                     <input type="email" name="email" class="form-control" value="<?= htmlspecialchars($utilisateurConnecte['email']) ?>" required>
                 </div>
+                <hr>
+                <div class="mb-2">
+                    <label>Ancien mot de passe <small>(laisser vide si inchangé)</small></label>
+                    <input type="password" name="ancien_mdp" class="form-control">
+                </div>
+                <div class="mb-2">
+                    <label>Nouveau mot de passe <small>(laisser vide si inchangé)</small></label>
+                    <input type="password" name="nouveau_mdp" class="form-control">
+                </div>
                 <button type="submit" class="btn btn-success mt-2">Sauvegarder</button>
             </form>
             <div id="messageModif" class="mt-2"></div>
-        </div>
-        <div id="form-mdp" class="mt-5">
-            <h5>Changer mon mot de passe :</h5>
-            <form id="mdpForm">
-                <div class="mb-2">
-                    <label>Ancien mot de passe</label>
-                    <input type="password" name="ancien" class="form-control" required>
-                </div>
-                <div class="mb-2">
-                    <label>Nouveau mot de passe</label>
-                    <input type="password" name="nouveau" class="form-control" required>
-                </div>
-                <button type="submit" class="btn btn-warning mt-2">Modifier le mot de passe</button>
-            </form>
-            <div id="messageMdp" class="mt-2"></div>
         </div>
 
         <!-- Supprimer le compte -->
@@ -96,20 +90,20 @@ if (!isset($utilisateurConnecte['roles'])) {
         <?php if ($utilisateurConnecte): ?>
             const utilisateur = <?= json_encode($utilisateurConnecte) ?>;
 
-            // Afficher boutons de rôle
             let html = "";
             const demandes = utilisateur.roles.demande.filter(r => r);
             const attribues = utilisateur.roles.attribue;
 
-            if (!attribues.includes("chef") && !demandes.includes("DemandeChef")) {
-                html += '<button class="btn btn-outline-success me-2" onclick="demanderRole(\'DemandeChef\')">Demander Chef</button>';
-            }
-            if (!attribues.includes("traducteur") && !demandes.includes("DemandeTraducteur")) {
-                html += '<button class="btn btn-outline-primary" onclick="demanderRole(\'DemandeTraducteur\')">Demander Traducteur</button>';
+            if (!attribues.includes("admin")) {
+                if (!attribues.includes("chef") && !demandes.includes("DemandeChef")) {
+                    html += '<button class="btn btn-outline-success me-2" onclick="demanderRole(\'DemandeChef\')">Demander Chef</button>';
+                }
+                if (!attribues.includes("traducteur") && !demandes.includes("DemandeTraducteur")) {
+                    html += '<button class="btn btn-outline-primary" onclick="demanderRole(\'DemandeTraducteur\')">Demander Traducteur</button>';
+                }
             }
             $("#role-actions").html(html);
 
-            // Admin : affichage de la table utilisateurs
             <?php if (in_array("admin", $utilisateurConnecte['roles']['attribue'])): ?>
                 $.get("data/utilisateurs.json", function(data) {
                     let table = '<table class="table table-bordered mt-3"><thead><tr><th>Nom</th><th>Email</th><th>Demandes</th><th>Attribués</th><th>Actions</th></tr></thead><tbody>';
@@ -117,18 +111,25 @@ if (!isset($utilisateurConnecte['roles'])) {
                     data.forEach((u, i) => {
                         const demandes = u.roles.demande.filter(r => r).join(', ') || 'Aucune';
                         const attribues = u.roles.attribue.join(', ') || 'Aucun';
+                        const hasDemandes = u.roles.demande.some(r => r && r !== '');
+
                         table += `<tr>
                     <td>${u.prenom} ${u.nom}</td>
                     <td>${u.email}</td>
                     <td>${demandes}</td>
                     <td>${attribues}</td>
                     <td>`;
-                        if (u.roles.demande.includes("DemandeChef")) {
-                            table += `<button class='btn btn-sm btn-success' onclick='attribuerRole(${i}, "chef")'>Valider Chef</button> `;
+
+                        if (hasDemandes) {
+                            if (u.roles.demande.includes("DemandeChef")) {
+                                table += `<button class='btn btn-sm btn-success me-1' onclick='attribuerRole(${i}, "chef")'>Valider Chef</button>`;
+                            }
+                            if (u.roles.demande.includes("DemandeTraducteur")) {
+                                table += `<button class='btn btn-sm btn-primary me-1' onclick='attribuerRole(${i}, "traducteur")'>Valider Traducteur</button>`;
+                            }
                         }
-                        if (u.roles.demande.includes("DemandeTraducteur")) {
-                            table += `<button class='btn btn-sm btn-primary' onclick='attribuerRole(${i}, "traducteur")'>Valider Traducteur</button>`;
-                        }
+
+                        table += `<button class='btn btn-sm btn-danger' onclick='supprimerUtilisateur(${i})'>🗑️ Supprimer</button>`;
                         table += `</td></tr>`;
                     });
 
@@ -143,7 +144,7 @@ if (!isset($utilisateurConnecte['roles'])) {
             $('#form-modif').slideToggle();
         });
 
-        // Envoi formulaire AJAX
+        // Envoi AJAX modif infos + mdp
         $('#modifForm').on('submit', function(e) {
             e.preventDefault();
             $.ajax({
@@ -154,10 +155,24 @@ if (!isset($utilisateurConnecte['roles'])) {
                     $('#messageModif').html(`<div class="alert alert-success">${response}</div>`);
                     setTimeout(() => location.reload(), 1000);
                 },
-                error: function() {
-                    $('#messageModif').html(`<div class="alert alert-danger">Erreur lors de la modification.</div>`);
+                error: function(xhr) {
+                    $('#messageModif').html(`<div class="alert alert-danger">${xhr.responseText}</div>`);
                 }
             });
+        });
+
+        // Supprimer son propre compte
+        $('#supprimerCompte').on('click', function() {
+            if (confirm("Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.")) {
+                $.post('recap_data/supprimer_compte.php')
+                    .done(function(res) {
+                        $('#messageSuppression').html(`<div class="alert alert-success">${res}</div>`);
+                        setTimeout(() => window.location.href = 'logout.php', 1500);
+                    })
+                    .fail(function() {
+                        $('#messageSuppression').html(`<div class="alert alert-danger">Erreur lors de la suppression du compte.</div>`);
+                    });
+            }
         });
     });
 
@@ -178,33 +193,15 @@ if (!isset($utilisateurConnecte['roles'])) {
         });
     }
 
-    $('#mdpForm').on('submit', function(e) {
-        e.preventDefault();
-        $.post('recap_data/modifier_mdp.php', $(this).serialize())
-            .done(function(res) {
-                $('#messageMdp').html(`<div class="alert alert-success">${res}</div>`);
-                setTimeout(() => location.reload(), 1000);
-            })
-            .fail(function() {
-                $('#messageMdp').html(`<div class="alert alert-danger">Erreur lors de la mise à jour du mot de passe.</div>`);
-            });
-    });
-
-    $('#supprimerCompte').on('click', function() {
-        if (confirm("Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.")) {
-            $.post('recap_data/supprimer_compte.php')
-                .done(function(res) {
-                    $('#messageSuppression').html(`<div class="alert alert-success">${res}</div>`);
-                    setTimeout(() => window.location.href = 'logout.php', 1500);
+    function supprimerUtilisateur(index) {
+        if (confirm("Supprimer définitivement cet utilisateur ?")) {
+            $.post("recap_data/supprimer_utilisateur.php", {
+                    index: index
                 })
-                .fail(function() {
-                    $('#messageSuppression').html(`<div class="alert alert-danger">Erreur lors de la suppression du compte.</div>`);
-                });
+                .done(() => location.reload())
+                .fail(() => alert("Erreur lors de la suppression de l'utilisateur."));
         }
-    });
+    }
 </script>
 
 <?php require_once "include/footer.inc.php"; ?>
-</body>
-
-</html>

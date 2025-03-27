@@ -1,7 +1,7 @@
 <?php
 $titre = "Réinitialisation du mot de passe | MonSiteDeRecettes";
 
-include 'include/header.inc.php';
+include 'include/headerinc.php';
 
 if (isset($_POST['reinitialiser_mdp'])) {
     $email = $_POST['email'];
