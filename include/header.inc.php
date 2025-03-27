@@ -1,33 +1,45 @@
 <?php
+<<<<<<< HEAD
 include 'include/functions.inc.php';
 
 session_start();
 $Logged = isset($_SESSION['email']);
+=======
+include 'functions.inc.php';
+ session_start(); 
+ $Logged=isset($_SESSION['email']) ;
+>>>>>>> 3e506486891cf90240861b54ad3d9d65915d061d
 ?>
 
-<!DOCTYPE html>
 <html lang="fr">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<<<<<<< HEAD
     <title><?php echo $titre; ?></title>
     <!-- Bootstrap CSS -->
+=======
+    <title><?php echo $titre;?></title>
+>>>>>>> 3e506486891cf90240861b54ad3d9d65915d061d
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="style/style.css"> <!-- Ton fichier CSS si besoin -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <script src="js/script.js"></script>
 </head>
 
 <body>
 
+<<<<<<< HEAD
     <!-- Navbar Bootstrap -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
             <a class="navbar-brand" href="index.php">🍽️ MonSiteDeRecettes</a>
+=======
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <a class="navbar-brand" href="index.php">🍽️ FoodMa</a>
+>>>>>>> 3e506486891cf90240861b54ad3d9d65915d061d
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -59,6 +71,7 @@ $Logged = isset($_SESSION['email']);
                     <button class="btn btn-outline-success" type="submit">🔍</button>
                 </form>
 
+<<<<<<< HEAD
                 <ul class="navbar-nav ms-3">
                     <li>
                         <?php if ($Logged): ?>
@@ -74,3 +87,28 @@ $Logged = isset($_SESSION['email']);
             </div>
         </div>
     </nav>
+=======
+            <ul class="navbar-nav ms-3">
+                <?php if ($Logged): ?>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user-circle me-1"></i> Mon compte
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="profile.php"><i class="fas fa-user me-2"></i>Profil</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="logout.php"><i class="fas fa-sign-out-alt me-2"></i>Déconnexion</a></li>
+                        </ul>
+                    </li>
+                <?php else: ?>
+                    <li class="nav-item">
+                        <a href="login.php" id="login-btn" class="btn btn-primary">Se connecter</a>
+                    </li>
+                <?php endif; ?>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+>>>>>>> 3e506486891cf90240861b54ad3d9d65915d061d

@@ -22,5 +22,41 @@
             ],
             "attribue": []
         }
+    },
+    {
+        "nom": "test",
+        "prenom": "yos",
+        "email": "youssefnaro@gmail.com",
+        "mdp": "$2y$10$2XCyxcY2AWDE1XDbxHxOJOl2PJgq5vh55g2gvyS7Ml1sSN4eQpMzq",
+        "roles": {
+            "demande": [
+                "DemandeChef"
+            ],
+            "attribue": []
+        }
+    },
+    {
+        "nom": "test",
+        "prenom": "yos",
+        "email": "narododo007@gmail.com",
+        "mdp": "$2y$10$h1sBgqqO1q0J3vs41jWekemBzZgd8ShmYjE3SN1KDXP3lS3aukKD.",
+        "roles": {
+            "demande": [
+                "DemandeChef"
+            ],
+            "attribue": []
+        }
+    },
+    {
+        "nom": "test",
+        "prenom": "yos",
+        "email": "narododo007@gmail.com",
+        "mdp": "$2y$10$\/jmvTNCa9U4n\/2m80B.vOeFNjUPQf41gazp5V3c3VoWFQZGvzXfR.",
+        "roles": {
+            "demande": [
+                "DemandeChef"
+            ],
+            "attribue": []
+        }
     }
 ]

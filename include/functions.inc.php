@@ -20,7 +20,11 @@ function connexion($e_mail, $mdp)
             
             if (password_verify($mdp, $utilisateur['mdp'])) {
                 
+<<<<<<< HEAD
                 session_start();
+=======
+
+>>>>>>> 3e506486891cf90240861b54ad3d9d65915d061d
                 
                 $_SESSION['nom'] = $utilisateur['nom'];
                 $_SESSION['prenom'] = $utilisateur['prenom'];
@@ -82,7 +86,6 @@ function inscription($nom, $prenom, $email, $mdp, $choixRole)
     $utilisateursData[] = $nouvelUtilisateur;
 
     if (file_put_contents($utilisateursFile, json_encode($utilisateursData, JSON_PRETTY_PRINT))) {
-        session_start();
         $_SESSION['nom'] = $nom;
         $_SESSION['prenom'] = $prenom;
         $_SESSION['email'] = $email;
