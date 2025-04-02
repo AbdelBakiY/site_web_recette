@@ -16,7 +16,36 @@ if ($recetteId !== null && isset($recettes[$recetteId])) {
 
 include 'include/header.inc.php';
 ?>
+<style>:root {
+    --primary-color: rgb(63, 39, 242);
+    --secondary-color: #a29bfe;
+    --accent-color: #fd79a8;
+    --light-color: #f8f9fa;
+    --dark-color: #343a40;
+    --text-color: #2d3436;
+    --text-light: #636e72;
+}
 
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: rgb(234, 235, 238);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+.search-container {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+.search-header {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    margin-bottom: 30px;
+}</style>
 <div class="container mt-4">
     <h1 class="text-center mb-4"><?php echo $titre; ?></h1>
     <div class="card mb-4">

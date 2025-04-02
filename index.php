@@ -154,6 +154,7 @@ body {
 
 <script>
 $(document).ready(function () {
+    let searchTerm = $('#search').val();
     $.ajax({
         url: "recap_data/getRecette.php",
         method: "GET",
@@ -164,14 +165,14 @@ $(document).ready(function () {
 
         if (data && data.length > 0) {
             data.forEach((recette, index) => {
-                let recetteId = index; 
+                let recetteId = index;  // Index as the unique identifier for the recipe
                 let image = recette.imageURL || "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80";
                 let titre = recette.nameFR || recette.name || "Titre inconnu";
                 let author = recette.Author || "Auteur inconnu";
                 let without = recette.Without || [];
-                let detailLink = `recette_details.php?id=${recetteId}`;
+                let detailLink = `recette_details.php?id=${recetteId}`; // Pass index as the recipe id
                 
-                // Création des tags pour les restrictions alimentaires
+                // Creating tags for dietary restrictions
                 let tagsHtml = '';
                 if (without.length > 0) {
                     without.forEach(item => {
@@ -204,6 +205,85 @@ $(document).ready(function () {
         $("#recettes-container").html("<p class='text-danger text-center'>Erreur lors du chargement des recettes. Veuillez réessayer plus tard.</p>");
     });
 });
+$(document).ready(function() {
+    // Charger les recettes
+    let allRecipes = [];
+    
+    $.getJSON("recap_data/getRecette.php", function(data) {
+        allRecipes = data;
+        showRecipes(allRecipes); // Afficher toutes au début
+    });
+
+    // Fonction pour afficher les recettes
+    function showRecipes(recipes) {
+        const container = $("#simpleResults");
+        container.empty(); // Vider les anciens résultats
+
+        if (recipes.length === 0) {
+            container.html('<p class="text-center">Aucune recette trouvée</p>');
+            return;
+        }
+
+        recipes.forEach(function(recipe, index) {
+            // Préparer le HTML pour une recette
+            const card = `
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <img src="${recipe.imageURL || 'default.jpg'}" class="card-img-top">
+                        <div class="card-body">
+                            <h5>${recipe.nameFR || recipe.name}</h5>
+                            <p>Auteur: ${recipe.Author || "Inconnu"}</p>
+                            <a href="recette_details.php?id=${index}" class="btn btn-primary">Voir</a>
+                        </div>
+                    </div>
+                </div>
+            `;
+            container.append(card);
+        });
+    }
+
+    // Recherche simple
+    $("#simpleSearch").on("input", function() {
+        const searchText = $(this).val().toLowerCase();
+        const activeFilter = $(".filter-btn.active").data("filter") || "all";
+
+        const filtered = allRecipes.filter(recipe => {
+            // 1. Vérifier le filtre
+            if (activeFilter !== "all" && !recipe.Without?.includes(activeFilter)) {
+                return false;
+            }
+
+            // 2. Vérifier la recherche
+            if (searchText === "") return true;
+
+            // Chercher dans le nom
+            if (recipe.nameFR?.toLowerCase().includes(searchText)) return true;
+            if (recipe.name?.toLowerCase().includes(searchText)) return true;
+
+            // Chercher dans les ingrédients
+            for (const ing of recipe.ingredientsFR || []) {
+                if (ing.name?.toLowerCase().includes(searchText)) return true;
+            }
+            for (const ing of recipe.ingredients || []) {
+                if (ing.name?.toLowerCase().includes(searchText)) return true;
+            }
+
+            return false;
+        });
+
+        showRecipes(filtered);
+    });
+
+    // Gestion des filtres
+    $(".filter-btn").click(function() {
+        $(".filter-btn").removeClass("active");
+        $(this).addClass("active");
+        $("#simpleSearch").trigger("input"); // Relancer la recherche
+    });
+});
+</script>
+
+
 </script>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
