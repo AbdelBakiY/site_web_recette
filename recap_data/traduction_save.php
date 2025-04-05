@@ -11,6 +11,7 @@ if (!isset($_SESSION['roles']['attribue']) ||
     in_array('chef', $_SESSION['roles']['attribue']))) {
     $_SESSION['error'] = "Accès refusé : permissions insuffisantes";
     error_log("Redirection: permissions insuffisantes");
+    header("Location: ../index.php");
     exit;
 }
 
@@ -21,6 +22,7 @@ error_log("Chemin recettes.json: ".$recettesFile);
 if (!file_exists($recettesFile)) {
     $_SESSION['error'] = "Fichier de recettes introuvable";
     error_log("Fichier introuvable");
+    header("Location: ../index.php");
     exit;
 }
 
@@ -29,6 +31,7 @@ $recetteId = $_POST['recette_id'] ?? null;
 if (empty($recetteId)) {
     $_SESSION['error'] = "ID de recette manquant dans POST";
     error_log("ID recette manquant: ".print_r($_POST, true));
+    header("Location: ../index.php");
     exit;
 }
 
@@ -36,6 +39,7 @@ if (empty($recetteId)) {
 $recettes = json_decode(file_get_contents($recettesFile), true);
 if (json_last_error() !== JSON_ERROR_NONE) {
     $_SESSION['error'] = "Erreur de lecture du fichier recettes";
+    header("Location: ../index.php");
     exit;
 }
 

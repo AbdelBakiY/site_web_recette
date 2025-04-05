@@ -17,7 +17,7 @@ if (!isset($utilisateurConnecte['roles'])) {
     $utilisateurConnecte['roles'] = ['demande' => [], 'attribue' => []];
 }
 ?>
-
+<link rel="stylesheet" href="css/style.css">
 <main class="container mt-4">
     <h1 class="mb-4">Mon Profil</h1>
 

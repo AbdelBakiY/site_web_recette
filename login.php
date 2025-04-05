@@ -8,7 +8,8 @@ if (isset($_POST['connexion'])) {
 
     connexion($e_mail, $mdp);
 
-}
+}$_SESSION['roles'] = $user['roles']; 
+
 
 ?>
 

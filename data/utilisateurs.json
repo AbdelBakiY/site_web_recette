@@ -2,14 +2,19 @@
     {
         "nom": "mougari",
         "prenom": "Abdel baki",
-        "email": "abdelbaki.mougari@gmail.co",
+        "email": "abdelbaki.mougari@gmail.com",
         "mdp": "$2y$10$Xt1v.IgK5Pu94\/\/eEpdTcO3rQ1M3joN7rDHtsmUi\/t\/MjPrpOOJ7W",
         "roles": {
             "demande": [
                 "DemandeChef"
             ],
             "attribue": []
-        }
+        },
+        "likes": [
+            1,
+            0,
+            3
+        ]
     },
     {
         "nom": "test",
@@ -21,7 +26,8 @@
                 "DemandeChef"
             ],
             "attribue": []
-        }
+        },
+        "likes": []
     },
     {
         "nom": "test",
@@ -33,30 +39,27 @@
                 "DemandeChef"
             ],
             "attribue": []
-        }
+        },
+        "likes": []
     },
     {
-        "nom": "test",
-        "prenom": "yos",
+        "nom": "devs",
+        "prenom": "youssef",
         "email": "narododo007@gmail.com",
         "mdp": "$2y$10$h1sBgqqO1q0J3vs41jWekemBzZgd8ShmYjE3SN1KDXP3lS3aukKD.",
         "roles": {
             "demande": [
                 "DemandeChef"
             ],
-            "attribue": []
-        }
-    },
-    {
-        "nom": "test",
-        "prenom": "yos",
-        "email": "narododo007@gmail.com",
-        "mdp": "$2y$10$\/jmvTNCa9U4n\/2m80B.vOeFNjUPQf41gazp5V3c3VoWFQZGvzXfR.",
-        "roles": {
-            "demande": [
-                "DemandeChef"
-            ],
-            "attribue": []
-        }
+            "attribue": [
+                "traducteur"
+            ]
+        },
+        "likes": [
+            3,
+            0,
+            2,
+            1
+        ]
     }
 ]
