@@ -44,6 +44,7 @@
             "demande": [
                 "DemandeChef"
             ],
+<<<<<<< HEAD
             "attribue": []
         }
     },
@@ -58,5 +59,16 @@
             ],
             "attribue": []
         }
+=======
+            "attribue": [
+                "traducteur"
+            ]
+        },
+        "likes": [
+            3,
+            2,
+            1
+        ]
+>>>>>>> 6a80a62ae6e1e1e6741487f79ffaabf72df91f9d
     }
 ]
