@@ -19,45 +19,36 @@ include 'include/header.inc.php'; ?>
                     let titre = recette.nameFR || recette.name || "Titre inconnu";
                     let author = recette.Author || "Auteur inconnu";
                     let without = recette.Without || [];
-                    const storedLike = localStorage.getItem(`like_${recetteId}`);
-                    const storedCount = localStorage.getItem(`like_count_${recetteId}`);
-                    const likes = storedCount || recette.likes || 0;
-                    const comments = recette.comments ? recette.comments.length : 0;
-                    let detailLink = `recette_details.php?id=${recetteId}`;
 
-                    // Création des tags pour les restrictions alimentaires
-                    let tagsHtml = '';
-                    if (without.length > 0) {
-                        without.forEach(item => {
-                            tagsHtml += `<span class="tag">Sans ${item}</span>`;
-                        });
-                    }
+                    // REMOVED localStorage like
+                    const likes = recette.likes || 0;
+                    const comments = recette.comments ? recette.comments.length : 0;
 
                     let card = `
-                        <div class="recette-card">
-                            <img src="${recette.imageURL || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'}" alt="${recette.nameFR || recette.name || 'Titre inconnu'}">
-                            <div class="recette-info">
-                                <h3><a href="recette_details.php?id=${recetteId}">${recette.nameFR || recette.name || 'Titre inconnu'}</a></h3>
-                                <div class="meta-info">
-                                    <span class="meta-item"><i class="fas fa-user"></i> ${recette.Author || 'Auteur inconnu'}</span>
-                                </div>
-                                <div class="mb-2">
-                                    ${(recette.Without || []).map(item => `<span class="tag">Sans ${item}</span>`).join('')}
-                                </div>
-                                <div class="social-stats">
-                                    <span class="${storedLike === 'true' ? 'text-danger' : ''}">
-                                        <i class="fas fa-heart"></i> ${likes}
-                                    </span>
-                                    <span>
-                                        <i class="fas fa-comment"></i> ${comments}
-                                    </span>
-                                </div>
-                                <a href="recette_details.php?id=${recetteId}" class="btn btn-primary mt-2">
-                                    <i class="fas fa-book-open"></i> Voir la recette
-                                </a>
-                            </div>
-                        </div>
-                    `;
+        <div class="recette-card">
+            <img src="${image}" alt="${titre}">
+            <div class="recette-info">
+                <h3><a href="recette_details.php?id=${recetteId}">${titre}</a></h3>
+                <div class="meta-info">
+                    <span class="meta-item"><i class="fas fa-user"></i> ${author}</span>
+                </div>
+                <div class="mb-2">
+                    ${(without || []).map(item => `<span class="tag">Sans ${item}</span>`).join('')}
+                </div>
+                <div class="social-stats">
+                    <span>
+                        <i class="fas fa-heart"></i> ${likes}
+                    </span>
+                    <span>
+                        <i class="fas fa-comment"></i> ${comments}
+                    </span>
+                </div>
+                <a href="recette_details.php?id=${recetteId}" class="btn btn-primary mt-2">
+                    <i class="fas fa-book-open"></i> Voir la recette
+                </a>
+            </div>
+        </div>
+    `;
                     container.append(card);
                 });
             } else {
