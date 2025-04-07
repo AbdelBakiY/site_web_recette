@@ -1,27 +1,16 @@
 [
     {
-        "nom": "mougari",
-        "prenom": "Abdel baki",
-        "email": "abdelbaki.mougari@gmail.co",
-        "mdp": "$2y$10$Xt1v.IgK5Pu94\/\/eEpdTcO3rQ1M3joN7rDHtsmUi\/t\/MjPrpOOJ7W",
-        "roles": {
-            "demande": [
-                "DemandeChef"
-            ],
-            "attribue": []
-        }
-    },
-    {
         "nom": "test",
         "prenom": "yos",
         "email": "dekhailyoussef@test.com",
         "mdp": "$2y$10$cntD6NHDJ9MneZVOso2w5e23.67b4DxdqyMqYM4exitA0hazLQyRe",
         "roles": {
-            "demande": [
-                "DemandeChef"
-            ],
-            "attribue": []
-        }
+            "demande": [],
+            "attribue": [
+                "chef"
+            ]
+        },
+        "likes": []
     },
     {
         "nom": "test",
@@ -33,42 +22,22 @@
                 "DemandeChef"
             ],
             "attribue": []
-        }
+        },
+        "likes": []
     },
     {
-        "nom": "test",
-        "prenom": "yos",
-        "email": "narododo007@gmail.com",
-        "mdp": "$2y$10$h1sBgqqO1q0J3vs41jWekemBzZgd8ShmYjE3SN1KDXP3lS3aukKD.",
+        "nom": "mougari",
+        "prenom": "abdzel",
+        "email": "abdelbaki.mougari@gmail.com",
+        "mdp": "$2y$10$R5yx4Neq737wGYqDhraMKOs18p.AxgyDanQoxq.xnENRMKIhqIxQC",
         "roles": {
-            "demande": [
-                "DemandeChef"
-            ],
-<<<<<<< HEAD
-            "attribue": []
-        }
-    },
-    {
-        "nom": "test",
-        "prenom": "yos",
-        "email": "narododo007@gmail.com",
-        "mdp": "$2y$10$\/jmvTNCa9U4n\/2m80B.vOeFNjUPQf41gazp5V3c3VoWFQZGvzXfR.",
-        "roles": {
-            "demande": [
-                "DemandeChef"
-            ],
-            "attribue": []
-        }
-=======
+            "demande": [],
             "attribue": [
-                "traducteur"
+                "admin"
             ]
         },
         "likes": [
-            3,
-            2,
-            1
+            0
         ]
->>>>>>> 6a80a62ae6e1e1e6741487f79ffaabf72df91f9d
     }
 ]

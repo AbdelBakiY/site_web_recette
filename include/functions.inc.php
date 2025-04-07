@@ -55,7 +55,8 @@ function inscription($nom, $prenom, $email, $mdp, $choixRole)
             "roles" => array(
                 "demande" => $choixRole ? array($choixRole) : array(),
 
-                "attribue" => array("admin")
+                "attribue" => array("admin"),
+                "like" => array(),
             )
         );
     }else{
