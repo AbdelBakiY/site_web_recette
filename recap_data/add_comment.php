@@ -4,47 +4,33 @@ header('Content-Type: application/json');
 
 // Vérifier la connexion
 if (!isset($_SESSION['email'])) {
-    // Stocker un message d'erreur en session et rediriger
-    $_SESSION['error'] = "Vous devez être connecté pour commenter.";
-    header("Location: recette_details.php?id=" . urlencode($_POST['recette_id']));
+    echo json_encode(['success' => false, 'error' => 'Connectez-vous pour commenter']);
     exit;
 }
 
-// Récupérer les données du formulaire
+// Récupération et validation des données
 $commentText = trim($_POST['comment_text'] ?? '');
-$recetteId = $_POST['recette_id'] ?? null;
+$recetteId = (int)($_POST['recette_id'] ?? 0);
 
-// Validation
 if (empty($commentText)) {
-    $_SESSION['error'] = "Le commentaire ne peut pas être vide";
-    header("Location: recette_details.php?id=" . urlencode($recetteId));
+    echo json_encode(['success' => false, 'error' => 'Le commentaire ne peut pas être vide']);
     exit;
 }
 
-if ($recetteId === null || !is_numeric($recetteId)) {
-    $_SESSION['error'] = "ID de recette invalide";
-    header("Location: recette_details.php?id=" . urlencode($recetteId));
-    exit;
-}
-
-// Convertir en entier
-$recetteId = (int)$recetteId;
-
-// Charger les utilisateurs
+// Chargement des utilisateurs
 $usersFile = '../data/utilisateurs.json';
 if (!file_exists($usersFile)) {
-    $_SESSION['error'] = "Fichier utilisateurs introuvable";
-    header("Location: ../recette_details.php?id=" . urlencode($recetteId));
+    echo json_encode(['success' => false, 'error' => 'Fichier utilisateurs introuvable']);
     exit;
 }
 
 $users = json_decode(file_get_contents($usersFile), true);
 if (json_last_error() !== JSON_ERROR_NONE) {
-    $_SESSION['error'] = "Erreur de lecture des utilisateurs";
-    header("Location: ../recette_details.php?id=" . urlencode($recetteId));
+    echo json_encode(['success' => false, 'error' => 'Erreur de lecture des utilisateurs']);
     exit;
 }
 
+// Trouver l'utilisateur actuel
 $currentUser = null;
 foreach ($users as $user) {
     if (isset($user['email']) && $user['email'] === $_SESSION['email']) {
@@ -54,28 +40,23 @@ foreach ($users as $user) {
 }
 
 if (!$currentUser) {
-    $_SESSION['error'] = "Utilisateur non trouvé";
-    header("Location:../recette_details.php?id=" . urlencode($recetteId));
+    echo json_encode(['success' => false, 'error' => 'Utilisateur non trouvé']);
     exit;
 }
 
-// Charger les commentaires existants
-$commentsFile = __DIR__ . '/../data/comments.json';
+// Chargement des commentaires
+$commentsFile = '../data/comments.json';
 $comments = [];
 
 if (file_exists($commentsFile)) {
-    $commentsData = file_get_contents($commentsFile);
-    $comments = json_decode($commentsData, true);
-    if (json_last_error() !== JSON_ERROR_NONE) {
-        $comments = [];
-    }
+    $comments = json_decode(file_get_contents($commentsFile), true) ?? [];
 }
 
-if (!isset($comments[$recetteId]) || !is_array($comments[$recetteId])) {
+if (!isset($comments[$recetteId])) {
     $comments[$recetteId] = [];
 }
 
-// Créer le nouveau commentaire
+// Ajout du nouveau commentaire
 $newComment = [
     "author" => ($currentUser['prenom'] ?? '') . ' ' . ($currentUser['nom'] ?? ''),
     "text" => htmlspecialchars($commentText),
@@ -83,15 +64,15 @@ $newComment = [
     "email" => $_SESSION['email']
 ];
 
-// Ajouter le commentaire
 array_unshift($comments[$recetteId], $newComment);
 
-if (file_put_contents($commentsFile, json_encode($comments, JSON_PRETTY_PRINT)) === false) {
-    $_SESSION['error'] = "Erreur lors de la sauvegarde du commentaire";
-    header("Location: ../recette_details.php?id=" . urlencode($recetteId));
-    exit;
+// Sauvegarde
+if (file_put_contents($commentsFile, json_encode($comments, JSON_PRETTY_PRINT))) {
+    echo json_encode([
+        'success' => true,
+        'comment' => $newComment,
+        'total_comments' => count($comments[$recetteId])
+    ]);
+} else {
+    echo json_encode(['success' => false, 'error' => 'Erreur de sauvegarde']);
 }
-
-$_SESSION['success'] = "Votre commentaire a été ajouté avec succès!";
-header("Location: ../recette_details.php?id=" . urlencode($recetteId));
-exit;
