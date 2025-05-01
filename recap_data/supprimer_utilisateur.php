@@ -1,25 +1,49 @@
 <?php
+// Vérification de la session admin avant tout
 session_start();
+$utilisateursJson = file_get_contents(__DIR__ . "/../data/utilisateurs.json");
+$utilisateurs = json_decode($utilisateursJson, true);
 
-if (!isset($_SESSION['email']) || !isset($_POST['index'])) {
-    http_response_code(403);
-    exit("Requête invalide.");
+// Vérifier si l'utilisateur connecté est admin
+$email = $_SESSION['email'] ?? null;
+$estAdmin = false;
+$adminIndex = -1;
+
+foreach ($utilisateurs as $i => $u) {
+    if ($u['email'] === $email) {
+        $adminIndex = $i;
+        if (in_array("admin", $u['roles']['attribue'])) {
+            $estAdmin = true;
+        }
+        break;
+    }
 }
 
-$index = intval($_POST['index']);
-$adminEmail = $_SESSION['email'];
-
-$utilisateursFile = '../data/utilisateurs.json';
-$utilisateurs = json_decode(file_get_contents($utilisateursFile), true);
-
-if ($utilisateurs[$index]['email'] === $adminEmail) {
+if (!$estAdmin) {
     http_response_code(403);
-    echo "Impossible de vous supprimer vous-même.";
-    exit;
+    die("Accès refusé");
 }
 
-unset($utilisateurs[$index]);
+// Récupérer l'index
+$userIndex = isset($_POST['index']) ? (int)$_POST['index'] : -1;
 
-file_put_contents($utilisateursFile, json_encode(array_values($utilisateurs), JSON_PRETTY_PRINT));
+// Vérifier les valeurs
+if ($userIndex < 0 || $userIndex >= count($utilisateurs)) {
+    http_response_code(400);
+    die("Index utilisateur invalide");
+}
 
-echo "Utilisateur supprimé.";
+// Empêcher un admin de se supprimer lui-même via cette interface
+if ($userIndex === $adminIndex) {
+    http_response_code(400);
+    die("Vous ne pouvez pas supprimer votre propre compte via cette interface");
+}
+
+// Supprimer l'utilisateur
+array_splice($utilisateurs, $userIndex, 1);
+
+// Enregistrer les modifications
+file_put_contents(__DIR__ . "/../data/utilisateurs.json", json_encode($utilisateurs, JSON_PRETTY_PRINT));
+
+echo "Utilisateur supprimé avec succès";
+?>

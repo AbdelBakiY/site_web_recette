@@ -2,7 +2,7 @@
 $titre = "Profil | MonSiteDeRecettes";
 require_once "include/header.inc.php";
 
-$utilisateurs = json_decode(file_get_contents("data/utilisateurs.json"), true);
+$utilisateurs = json_decode(file_get_contents(__DIR__ . "/data/utilisateurs.json"), true);
 $email = $_SESSION['email'] ?? null;
 $utilisateurConnecte = null;
 
@@ -17,7 +17,7 @@ if (!isset($utilisateurConnecte['roles'])) {
     $utilisateurConnecte['roles'] = ['demande' => [], 'attribue' => []];
 }
 ?>
-<link rel="stylesheet" href="css/style.css">
+
 <main class="container mt-4">
     <h1 class="mb-4">Mon Profil</h1>
 
@@ -25,9 +25,12 @@ if (!isset($utilisateurConnecte['roles'])) {
         <div class="alert alert-warning">Vous devez être connecté pour accéder à cette page.</div>
     <?php else: ?>
         <div class="card p-3">
-            <h4><?= htmlspecialchars($utilisateurConnecte['prenom']) . " " . htmlspecialchars($utilisateurConnecte['nom']) ?></h4>
+            <h4><?= htmlspecialchars($utilisateurConnecte['prenom']) . " " . htmlspecialchars($utilisateurConnecte['nom']) ?>
+            </h4>
             <p><strong>Email :</strong> <?= htmlspecialchars($utilisateurConnecte['email']) ?></p>
-            <p><strong>Rôles attribués :</strong> <?= empty($utilisateurConnecte['roles']['attribue']) ? "Aucun" : implode(", ", $utilisateurConnecte['roles']['attribue']) ?></p>
+            <p><strong>Rôles attribués :</strong>
+                <?= empty($utilisateurConnecte['roles']['attribue']) ? "Aucun" : implode(", ", $utilisateurConnecte['roles']['attribue']) ?>
+            </p>
             <p><strong>Rôles demandés :</strong>
                 <?php
                 $demandes = array_filter($utilisateurConnecte['roles']['demande'], fn($r) => !is_null($r) && $r !== '');
@@ -43,15 +46,18 @@ if (!isset($utilisateurConnecte['roles'])) {
             <form id="modifForm">
                 <div class="mb-2">
                     <label>Prénom</label>
-                    <input type="text" name="prenom" class="form-control" value="<?= htmlspecialchars($utilisateurConnecte['prenom']) ?>" required>
+                    <input type="text" name="prenom" class="form-control"
+                        value="<?= htmlspecialchars($utilisateurConnecte['prenom']) ?>" required>
                 </div>
                 <div class="mb-2">
                     <label>Nom</label>
-                    <input type="text" name="nom" class="form-control" value="<?= htmlspecialchars($utilisateurConnecte['nom']) ?>" required>
+                    <input type="text" name="nom" class="form-control"
+                        value="<?= htmlspecialchars($utilisateurConnecte['nom']) ?>" required>
                 </div>
                 <div class="mb-2">
                     <label>Email</label>
-                    <input type="email" name="email" class="form-control" value="<?= htmlspecialchars($utilisateurConnecte['email']) ?>" required>
+                    <input type="email" name="email" class="form-control"
+                        value="<?= htmlspecialchars($utilisateurConnecte['email']) ?>" required>
                 </div>
                 <hr>
                 <div class="mb-2">
@@ -86,7 +92,7 @@ if (!isset($utilisateurConnecte['roles'])) {
 </main>
 
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         <?php if ($utilisateurConnecte): ?>
             const utilisateur = <?= json_encode($utilisateurConnecte) ?>;
 
@@ -105,7 +111,7 @@ if (!isset($utilisateurConnecte['roles'])) {
             $("#role-actions").html(html);
 
             <?php if (in_array("admin", $utilisateurConnecte['roles']['attribue'])): ?>
-                $.get("data/utilisateurs.json", function(data) {
+                $.getJSON("data/utilisateurs.json", function (data) {
                     let table = '<table class="table table-bordered mt-3"><thead><tr><th>Nom</th><th>Email</th><th>Demandes</th><th>Attribués</th><th>Actions</th></tr></thead><tbody>';
 
                     data.forEach((u, i) => {
@@ -114,11 +120,11 @@ if (!isset($utilisateurConnecte['roles'])) {
                         const hasDemandes = u.roles.demande.some(r => r && r !== '');
 
                         table += `<tr>
-                    <td>${u.prenom} ${u.nom}</td>
-                    <td>${u.email}</td>
-                    <td>${demandes}</td>
-                    <td>${attribues}</td>
-                    <td>`;
+            <td>${u.prenom} ${u.nom}</td>
+            <td>${u.email}</td>
+            <td>${demandes}</td>
+            <td>${attribues}</td>
+            <td>`;
 
                         if (hasDemandes) {
                             if (u.roles.demande.includes("DemandeChef")) {
@@ -140,36 +146,36 @@ if (!isset($utilisateurConnecte['roles'])) {
         <?php endif; ?>
 
         // Bouton édition infos
-        $('#edit-info').on('click', function() {
+        $('#edit-info').on('click', function () {
             $('#form-modif').slideToggle();
         });
 
         // Envoi AJAX modif infos + mdp
-        $('#modifForm').on('submit', function(e) {
+        $('#modifForm').on('submit', function (e) {
             e.preventDefault();
             $.ajax({
                 url: 'recap_data/modifier_infos.php',
                 type: 'POST',
                 data: $(this).serialize(),
-                success: function(response) {
+                success: function (response) {
                     $('#messageModif').html(`<div class="alert alert-success">${response}</div>`);
                     setTimeout(() => location.reload(), 1000);
                 },
-                error: function(xhr) {
+                error: function (xhr) {
                     $('#messageModif').html(`<div class="alert alert-danger">${xhr.responseText}</div>`);
                 }
             });
         });
 
         // Supprimer son propre compte
-        $('#supprimerCompte').on('click', function() {
+        $('#supprimerCompte').on('click', function () {
             if (confirm("Êtes-vous sûr de vouloir supprimer votre compte ? Cette action est irréversible.")) {
                 $.post('recap_data/supprimer_compte.php')
-                    .done(function(res) {
+                    .done(function (res) {
                         $('#messageSuppression').html(`<div class="alert alert-success">${res}</div>`);
                         setTimeout(() => window.location.href = 'logout.php', 1500);
                     })
-                    .fail(function() {
+                    .fail(function () {
                         $('#messageSuppression').html(`<div class="alert alert-danger">Erreur lors de la suppression du compte.</div>`);
                     });
             }
@@ -179,29 +185,52 @@ if (!isset($utilisateurConnecte['roles'])) {
     function demanderRole(role) {
         $.post("recap_data/update_role.php", {
             roleDemande: role
-        }, function() {
+        }, function () {
             location.reload();
         });
     }
 
     function attribuerRole(index, role) {
-        $.post("recap_data/valider_role.php", {
-            index: index,
-            role: role
-        }, function() {
-            location.reload();
+    // Afficher un message temporaire
+    $('#admin-users').append('<div id="roleMsg" class="alert alert-info mt-2">Traitement en cours...</div>');
+    
+    $.post("recap_data/valider_role.php", {
+        index: index,
+        role: role
+    })
+    .done(function(response) {
+        $('#roleMsg').removeClass('alert-info').addClass('alert-success')
+            .html('Rôle attribué avec succès! Actualisation...');
+        setTimeout(() => location.reload(), 1000);
+    })
+    .fail(function(xhr) {
+        $('#roleMsg').removeClass('alert-info').addClass('alert-danger')
+            .html('Erreur: ' + (xhr.responseText || 'Problème lors de l\'attribution du rôle'));
+        console.error('Erreur lors de l\'attribution du rôle:', xhr);
+    });
+}
+
+function supprimerUtilisateur(index) {
+    if (confirm("Supprimer définitivement cet utilisateur ?")) {
+        // Afficher un message temporaire
+        $('#admin-users').append('<div id="deleteMsg" class="alert alert-info mt-2">Suppression en cours...</div>');
+        
+        $.post("recap_data/supprimer_utilisateur.php", {
+            index: index
+        })
+        .done(function(response) {
+            $('#deleteMsg').removeClass('alert-info').addClass('alert-success')
+                .html('Utilisateur supprimé avec succès! Actualisation...');
+                location.href = location.href.split('?')[0] + '?refresh=' + new Date().getTime();
+            })
+        .fail(function(xhr) {
+            $('#deleteMsg').removeClass('alert-info').addClass('alert-danger')
+                .html('Erreur: ' + (xhr.responseText || 'Problème lors de la suppression'));
+            console.error('Erreur lors de la suppression:', xhr);
         });
     }
+}
 
-    function supprimerUtilisateur(index) {
-        if (confirm("Supprimer définitivement cet utilisateur ?")) {
-            $.post("recap_data/supprimer_utilisateur.php", {
-                    index: index
-                })
-                .done(() => location.reload())
-                .fail(() => alert("Erreur lors de la suppression de l'utilisateur."));
-        }
-    }
 </script>
 
 <?php require_once "include/footer.inc.php"; ?>

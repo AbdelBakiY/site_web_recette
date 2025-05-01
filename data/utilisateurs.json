@@ -1,63 +1,19 @@
 [
     {
-        "nom": "test",
-        "prenom": "yos",
-        "email": "dekhailyoussef@test.com",
-        "mdp": "$2y$10$cntD6NHDJ9MneZVOso2w5e23.67b4DxdqyMqYM4exitA0hazLQyRe",
-        "roles": {
-            "demande": [
-                "DemandeChef"
-            ],
-            "attribue": []
-        },
-        "likes": []
-    },
-    {
-        "nom": "test",
-        "prenom": "yos",
-        "email": "youssefnaro@gmail.com",
-        "mdp": "$2y$10$2XCyxcY2AWDE1XDbxHxOJOl2PJgq5vh55g2gvyS7Ml1sSN4eQpMzq",
-        "roles": {
-            "demande": [
-                "DemandeChef"
-            ],
-            "attribue": []
-        },
-        "likes": []
-    },
-    {
-        "nom": "devs",
-        "prenom": "youssef",
-        "email": "narododo007@gmail.com",
-        "mdp": "$2y$10$h1sBgqqO1q0J3vs41jWekemBzZgd8ShmYjE3SN1KDXP3lS3aukKD.",
-        "roles": {
-            "demande": [
-                "DemandeChef"
-            ],
-            "attribue": [
-                "traducteur"
-            ]
-        },
-        "likes": [
-            3,
-            1,
-            0,
-            5
-        ]
-    },
-    {
         "nom": "mougari",
-        "prenom": "abdzel",
+        "prenom": "abdel",
         "email": "abdelbaki.mougari@gmail.com",
         "mdp": "$2y$10$R5yx4Neq737wGYqDhraMKOs18p.AxgyDanQoxq.xnENRMKIhqIxQC",
         "roles": {
             "demande": [],
             "attribue": [
-                "admin"
+                "admin",
+                "chef"
             ]
         },
         "likes": [
-            0
+            0,
+            2
         ]
     }
 ]

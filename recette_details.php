@@ -1,17 +1,20 @@
 <?php
 session_start();
+include 'include/header.inc.php';
 
-// Chargement des recettes
-$recettes = json_decode(file_get_contents('data/recettes.json'), true);
+// Chargement de la recette
 $recetteId = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+$recettes = json_decode(file_get_contents('data/recettes.json'), true);
 
 if ($recetteId === null || $recetteId === false || !isset($recettes[$recetteId])) {
     header("Location: index.php");
     exit;
 }
+
+// Gestion des likes
 $likes = 0;
 $userLiked = false;
-if (file_exists(filename: 'data/utilisateurs.json')) {
+if (file_exists('data/utilisateurs.json')) {
     $users = json_decode(file_get_contents('data/utilisateurs.json'), true);
     foreach ($users as $user) {
         if (isset($user['likes']) && in_array($recetteId, $user['likes'])) {
@@ -22,41 +25,41 @@ if (file_exists(filename: 'data/utilisateurs.json')) {
         }
     }
 }
+
 $recette = $recettes[$recetteId];
-$titre = htmlspecialchars($recette['nameFR'] ?? $recette['name'] ?? 'Titre inconnu');
+$currentLang = $_SESSION['lang'] ?? 'fr';
+$titre = $currentLang === 'fr' ? ($recette['nameFR'] ?? $recette['name']) : $recette['name'];
 $image = htmlspecialchars($recette['imageURL'] ?? 'https://via.placeholder.com/800x600?text=Recette');
-$steps = $recette['stepsFR'] ?? $recette['steps'] ?? [];
-$ingredients = $recette['ingredientsFR'] ?? $recette['ingredients'] ?? [];
+$steps = $currentLang === 'fr' ? ($recette['stepsFR'] ?? $recette['steps']) : $recette['steps'];
+$ingredients = $currentLang === 'fr' ? ($recette['ingredientsFR'] ?? $recette['ingredients']) : $recette['ingredients'];
 $author = htmlspecialchars($recette['Author'] ?? 'Auteur inconnu');
 $without = $recette['Without'] ?? [];
 
-
+// Chargement des commentaires
 $commentsFile = 'data/comments.json';
 $comments = [];
-
-// Charger les commentaires
 if (file_exists($commentsFile)) {
     $allComments = json_decode(file_get_contents($commentsFile), true);
     $comments = $allComments[$recetteId] ?? [];
 }
-
-include 'include/header.inc.php';
 ?>
-<style>.btn-like {
+
+<style>
+.btn-like {
     transition: all 0.3s ease;
 }
-
 .btn-like.liked {
     background-color: #28a745 !important;
     border-color: #28a745 !important;
     color: white !important;
 }
-
 .btn-like:not(.liked) {
     background-color: transparent;
     border-color: #dc3545;
     color: #dc3545;
-}</style>
+}
+</style>
+
 <div class="container mt-4">
     <div class="row">
         <div class="col-md-6">
@@ -69,13 +72,22 @@ include 'include/header.inc.php';
                 </button>
                 <span class="align-self-center">
                     <i class="fas fa-comment"></i> <span class="comment-count"><?= count($comments) ?></span>
-                    commentaixres
+                    commentaires
                 </span>
             </div>
         </div>
 
         <div class="col-md-6">
-            <h1><?= $titre ?></h1>
+            <!-- Bouton de changement de langue -->
+            <div class="text-end mb-3">
+                <a href="recette_details.php?id=<?= $recetteId ?>&lang=<?= $currentLang === 'fr' ? 'en' : 'fr' ?>" 
+                   class="btn btn-sm btn-outline-primary">
+                    <i class="fas fa-language"></i> 
+                    <?= $currentLang === 'fr' ? 'English Version' : 'Version Française' ?>
+                </a>
+            </div>
+            
+            <h1><?= htmlspecialchars($titre) ?></h1>
             <p class="text-muted">Par <?= $author ?></p>
 
             <div class="mb-3">
@@ -151,21 +163,18 @@ include 'include/header.inc.php';
         </div>
     </div>
 </div>
-<?php
 
-if (
-    isset($_SESSION['roles']['attribue']) &&
+<?php if (isset($_SESSION['roles']['attribue']) &&
     (in_array('traducteur', $_SESSION['roles']['attribue']) ||
-        in_array('chef', $_SESSION['roles']['attribue']))
-):
-    ?>
+     in_array('chef', $_SESSION['roles']['attribue']))): ?>
     <a href="traduction.php?id=<?= $recetteId ?>" class="btn btn-info mt-3 fixed-bottom"
         style="right: 20px; bottom: 20px; width: auto;">
         <i class="fas fa-language"></i> Traduire cette recette
     </a>
 <?php endif; ?>
+
 <script>
-    $(document).ready(function() {
+$(document).ready(function() {
     // Gestion des likes
     $('.btn-like').click(function(e) {
         e.preventDefault();
@@ -179,7 +188,6 @@ if (
                 btn.toggleClass('liked');
                 btn.find('i').toggleClass('fas far');
                 
-                // Mettre à jour le texte et le compteur
                 btn.html(`
                     <i class="${response.liked ? 'fas' : 'far'} fa-heart"></i>
                     ${response.liked ? 'Aimé' : 'J\'aime'}
@@ -189,80 +197,62 @@ if (
         }, 'json');
     });
 
-        // Vérifier localStorage au chargement
-        const recetteId = <?= $recetteId ?>;
-        const storedLike = localStorage.getItem(`like_${recetteId}`);
-        const storedCount = localStorage.getItem(`like_count_${recetteId}`);
-
-        if (storedLike !== null) {
-            const btn = $('.like-btn');
-            btn.toggleClass('active', storedLike === 'true');
-            btn.find('.like-count').text(storedCount);
-            btn.find('i').next().text(storedLike === 'true' ? 'Aimé' : 'J\'aime');
+    // Gestion des commentaires
+    $('#comment-form').submit(function(e) {
+        e.preventDefault();
+        const commentText = $(this).find('textarea').val().trim();
+        if (!commentText) {
+            alert('Le commentaire ne peut pas être vide');
+            return;
         }
-    });
 
-    // Corrigez la requête AJAX pour les commentaires
-    $(document).ready(function () {
-        $('#comment-form').submit(function (e) {
-            e.preventDefault();
+        $.ajax({
+            url: 'recap_data/add_comment.php',
+            type: 'POST',
+            data: $(this).serialize(),
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    const dateObj = new Date(response.comment.date);
+                    const formattedDate = dateObj.toLocaleDateString('fr-FR', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
 
-            // Validation côté client
-            const commentText = $(this).find('textarea').val().trim();
-            if (!commentText) {
-                alert('Le commentaire ne peut pas être vide');
-                return;
-            }
+                    const newComment = `
+                        <div class="list-group-item">
+                            <div class="d-flex justify-content-between">
+                                <strong>${response.comment.author}</strong>
+                                <small class="text-muted">${formattedDate}</small>
+                            </div>
+                            <p class="mb-0 mt-2">${response.comment.text}</p>
+                        </div>`;
 
-            $.ajax({
-                url: 'recap_data/add_comment.php',
-                type: 'POST',
-                data: $(this).serialize(),
-                dataType: 'json',
-                success: function (response) {
-                    if (response.success) {
-                        const dateObj = new Date(response.comment.date);
-                        const formattedDate = dateObj.toLocaleDateString('fr-FR', {
-                            day: '2-digit',
-                            month: '2-digit',
-                            year: 'numeric',
-                            hour: '2-digit',
-                            minute: '2-digit'
-                        });
-
-                        const newComment = `
-                    <div class="list-group-item">
-                        <div class="d-flex justify-content-between">
-                            <strong>${response.comment.author}</strong>
-                            <small class="text-muted">${formattedDate}</small>
-                        </div>
-                        <p class="mb-0 mt-2">${response.comment.text}</p>
-                    </div>`;
-
-                        if ($('.list-group').length) {
-                            $('.list-group').prepend(newComment);
-                        } else {
-                            $('.alert-info').replaceWith(`<div class="list-group">${newComment}</div>`);
-                        }
-
-                        $('#comment-form textarea').val('');
-                        $('.comment-count').text(response.total_comments);
-                        $('.alert-info').hide();
+                    if ($('.list-group').length) {
+                        $('.list-group').prepend(newComment);
                     } else {
-                        alert(response.error || 'Erreur lors de l\'ajout du commentaire');
+                        $('.alert-info').replaceWith(`<div class="list-group">${newComment}</div>`);
                     }
-                },
-                error: function (xhr) {
-                    try {
-                        const errorResponse = JSON.parse(xhr.responseText);
-                        alert(errorResponse.error || 'Erreur serveur');
-                    } catch (e) {
-                        alert('Erreur de communication avec le serveur');
-                    }
+
+                    $('#comment-form textarea').val('');
+                    $('.comment-count').text(response.total_comments);
+                    $('.alert-info').hide();
                 }
-            });
+            },
+            error: function(xhr) {
+                try {
+                    const errorResponse = JSON.parse(xhr.responseText);
+                    alert(errorResponse.error || 'Erreur serveur');
+                } catch (e) {
+                    alert('Erreur de communication avec le serveur');
+                }
+            }
         });
     });
+});
 </script>
 
 <?php include 'include/footer.inc.php'; ?>

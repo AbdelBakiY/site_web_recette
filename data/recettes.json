@@ -1,9 +1,12 @@
 [
     {
         "name": "Crock Pot Roast",
-        "nameFR":"Roti à la cocotte",
+        "nameFR": "Roti à la cocotte",
         "Author": "Unknown",
-        "Without": ["NoGluten","NoMilk"],
+        "Without": [
+            "NoGluten",
+            "NoMilk"
+        ],
         "ingredients": [
             {
                 "quantity": "1",
@@ -83,7 +86,11 @@
         "name": "Roasted Asparagus",
         "nameFR": "Asperges roties",
         "Author": "Unknown",
-        "Without": ["NoGluten","NoMilk", "Vegan"],
+        "Without": [
+            "NoGluten",
+            "NoMilk",
+            "Vegan"
+        ],
         "ingredients": [
             {
                 "quantity": "1 lb",
@@ -126,13 +133,46 @@
             0
         ],
         "imageURL": "http://img.sndimg.com/food/image/upload/w_266/v1/img/recipes/50/84/7/picMcSyVd.jpg",
-        "originalURL": "http://www.food.com/recipe/roasted-asparagus-50847"
+        "originalURL": "http://www.food.com/recipe/roasted-asparagus-50847",
+        "ingredientsFR": [
+            {
+                "quantity": "1 livre",
+                "name": "(500g) d'asperges (Produits frais)",
+                "type": "Produce"
+            },
+            {
+                "quantity": "1 ½ c. à soupe",
+                "name": "d'huile d'olive",
+                "type": "Condiments"
+            },
+            {
+                "quantity": "½ c. à café",
+                "name": "de sel casher",
+                "type": "Baking"
+            }
+        ],
+        "stepsFR": [
+            "Préchauffez le four à 220°C (425°F).",
+            "Coupez la partie ligneuse à la base des asperges et jetez-la.",
+            "À l'économe, pelez la peau sur les 5-7 cm du bas des tiges (cela évite que les asperges ne soient filandreuses - les amateurs d'asperges comprendront).",
+            "Disposez les asperges sur une plaque de cuisson recouverte de papier aluminium et arrosez d'huile d'olive.",
+            "Saupoudrez de sel.",
+            "Avec vos mains, roulez les asperges pour les enrober uniformément d'huile et de sel.",
+            "Faites rôtir pendant 10-15 minutes (le temps varie selon l'épaisseur des tiges et la texture souhaitée).",
+            "Elles doivent être tendres quand on les pique avec la pointe d'un couteau.",
+            "Les pointes deviendront bien dorées - surveillez pour éviter qu'elles ne brûlent.",
+            "Dégustez nature, ou avec une légère vinaigrette pour apporter une touche d'acidité qui équilibre le plat."
+        ]
     },
     {
         "name": "Curried Lentils and Rice",
         "nameFR": "Lentilles et Riz au curry",
         "Author": "Unknown",
-        "Without": ["NoGluten","NoMilk", "Vegan"],
+        "Without": [
+            "NoGluten",
+            "NoMilk",
+            "Vegan"
+        ],
         "ingredients": [
             {
                 "quantity": "1 quart",
@@ -180,7 +220,9 @@
         "name": "Big Night Pizza",
         "nameFR": "La pizza des grands soirs",
         "Author": "Unknown",
-        "Without": ["Vegetarian"],
+        "Without": [
+            "Vegetarian"
+        ],
         "ingredients": [
             {
                 "quantity": "5 teaspoons",
@@ -247,7 +289,10 @@
         "name": "Cranberry and Apple Stuffed Acorn Squash Recipe",
         "nameFR": "Courge poivrée farcies aux cranberries et aux pommes",
         "Author": "Unknown",
-        "Without": ["NoGluten", "Vegetarian"],
+        "Without": [
+            "NoGluten",
+            "Vegetarian"
+        ],
         "ingredients": [
             {
                 "quantity": "2",
@@ -307,7 +352,9 @@
         "name": "Mic's Yorkshire Puds",
         "nameFR": "Yorkshire pudding  de Mickey",
         "Author": "Unknown",
-        "Without": [ "Vegetarian"],
+        "Without": [
+            "Vegetarian"
+        ],
         "ingredients": [
             {
                 "quantity": "200g",
